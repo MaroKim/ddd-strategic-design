@@ -109,7 +109,7 @@ docker compose -p kitchenpos up -d
 | 상품 이름 | Name  | 상품의 이름으로 비속어는 포할될 수 없다. |
 | 상품 가격 | Price | 상품의 가격으로 0원 이상이다.       |
 
-## 메뉴그룹
+### 메뉴그룹
 | 한글명      | 영문명       | 설명                           |
 |----------|-----------|------------------------------|
 | 메뉴 그룹    | MenuGroup | 특정한 목적을 가지고 메뉴들을 묶는 것을 의미한다. |
@@ -178,3 +178,10 @@ docker compose -p kitchenpos up -d
 
 ## 모델링
 
+### 상품
+- `Product`는 식별자와 `Name`, `Price`을 가진다.
+- `Price`는 0원 이상이어야 한다.
+- `Name`은 `Profanity`이 포함되어서는 안된다.
+- `Price`가 변경되었을때, (`Menu`의 `Price` > `MenuProduct`들의 `Price`) 이면 `Menu`의 `MenuStatus`는 `Hide`가 된다.
+
+### 메뉴그룹
