@@ -134,8 +134,8 @@ docker compose -p kitchenpos up -d
 | 주문 테이블 이름 | Name           | 주문 테이블의 이름이다.                               |
 | 방문한 손님 수  | NumberOfGuests | 특정 주문테이블을 사용중인 1명이상의 손님 수를 의미한다.            |
 | 테이블 상태    | TableStatus    | 테이블의 사용가능여부를 상태로 나타낸 것으로 사용중, 비어있음 으로 표현한다. |
-| 테이블 사용중   | sit            | 테이블을 손님이 사용중인 상태를 말한다.                      |
-| 테이블 비어있음  | clear          | 테이블에 손님이 없는 상태를 말한다.                        |
+| 테이블 사용중   | Sit            | 테이블을 손님이 사용중인 상태를 말한다.                      |
+| 테이블 비어있음  | Clear          | 테이블에 손님이 없는 상태를 말한다.                        |
 
 ### 주문
 | 한글명   | 영문명             | 설명                                                                              |
@@ -198,3 +198,17 @@ docker compose -p kitchenpos up -d
 - MenuProduct에는 등록된 Product가 있어야 한다.
 - Price는 MenuProduct들의 Price의 합보다 작아야 한다.
 - `Name`은 `Profanity`이 없는 1글자 이상의 단어가 필요하다.
+- MenuStatus에는 Display와 Hide가 있고 상태를 수정할 수 있다.
+- Display인 Menu만 Guest가 Order를 요청할 수 있다.
+- Display는 Menu의 Price가 MenuProduct들의 Price의 합보다 작아야 가능하다.
+- Hide인 Menu는 Guest가 Order를 요청할 수 없다.
+
+### 주문테이블
+- OrderTable은 식별자와 Name, NumberOfGuests, TableStatus를 가진다.
+- `Name`은 1글자 이상의 단어가 필요하다.
+- TableStatus는 Sit, Clear가 있고 상태를 수정할 수 있다.
+- TableStatus는 Table에 OrderStatus가 Complete가 아닌 Order가 남아 있다면, Clear할 수 없다.
+- OrderTable에 있는 NumberOfGuest 변경이 가능하다.
+- NumberOfGuests를 변경 시, 0명이상이 필요하다.
+
+
