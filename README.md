@@ -138,15 +138,16 @@ docker compose -p kitchenpos up -d
 | 테이블 비어있음  | Clear          | 테이블에 손님이 없는 상태를 말한다.                        |
 
 ### 주문
-| 한글명   | 영문명             | 설명                                                                              |
-|-------|-----------------|---------------------------------------------------------------------------------|
-| 주문    | Order           | 손님이 제공받길 원하는 메뉴들의 요청을 의미한다.                                                     |
-| 주문 항목 | OrderLineItem   | 손님이 주문한 메뉴에 대한 정보를 의미한다.                                                        |
-| 주문 유형 | OrderType       | 사용자가 주문 항목을 제공받기 위한 방법을 의미한다. 배달, 포장, 매장 식사 유형이 있다.                             |
-| 배달    | Delivery        | 손님이 배달주소로 음식을 전달해주길 요청하는 유형을 의미한다.                                              |
-| 포장    | Takeout         | 손님이 직접 음식을 가지고 가는 유형을 의미한다.                                                     |
-| 매장 식사 | EatIn           | 손님이 주문테이블에서 음식을 식사하는 유형을 의미한다.                                                  |
-| 주문 상태 | OrderStatus     | 손님이 주문한 메뉴들을 접수에서 완료까지의 상태를 표시한다. 대기중, 준비중, 서빙 완료, 배달 시작, 배달 완료, 주문 완료로 구성되어 있다. |
+| 한글명   | 영문명           | 설명                                                                               |
+|-------|---------------|----------------------------------------------------------------------------------|
+| 주문    | Order         | 손님이 제공받길 원하는 메뉴들의 요청을 의미한다.                                                      |
+| 주문 항목 | OrderLineItem | 손님이 주문한 메뉴에 대한 정보를 의미한다.                                                         |
+| 주문 유형 | OrderType     | 사용자가 주문 항목을 제공받기 위한 방법을 의미한다. 배달, 포장, 매장 식사 유형이 있다.                              |
+| 주문 시간 | OrderDateTime | 손님이 주문을 요청한 시간을 말한다.                                                             |
+| 배달    | Delivery      | 손님이 배달주소로 음식을 전달해주길 요청하는 유형을 의미한다.                                               |
+| 포장    | Takeout       | 손님이 직접 음식을 가지고 가는 유형을 의미한다.                                                      |
+| 매장 식사 | EatIn         | 손님이 주문테이블에서 음식을 식사하는 유형을 의미한다.                                                   |
+| 주문 상태 | OrderStatus   | 손님이 주문한 메뉴들을 접수에서 완료까지의 상태를 표시한다. 대기중, 준비중, 서빙 완료, 배달 시작, 배달 완료, 주문 완료로 구성되어 있다. |
 
 ### 배달
 | 한글명   | 영문명             | 설명                                      |
@@ -210,5 +211,15 @@ docker compose -p kitchenpos up -d
 - TableStatus는 Table에 OrderStatus가 Complete가 아닌 Order가 남아 있다면, Clear할 수 없다.
 - OrderTable에 있는 NumberOfGuest 변경이 가능하다.
 - NumberOfGuests를 변경 시, 0명이상이 필요하다.
+
+### 주문
+- Order는 식별자와 OrderType, OrderStatus, OrderDateTime, OrderLineItem, DeliveryAddress, OrderTable을 가진다.
+- OrderType은 Delivery, TakeOut, EatIn 중에 한가지를 가진다.
+- OrderLineItem이1개 이상 필요하다.
+- OrderLineItem에는 서로다른 Menu가 있어야 한다.
+- OrderLineItem에는 유효한 Menu가 있어야 한다. 
+- OrderType이 Takeout 또는 Delivery 일때, OrderLineItem의 Quantity는 1개 이상 필요하다
+- OrderType이 Delivery 일때, DeliveryAddress가 있어야 한다.
+- OrderType이 EatIn 일때, OrderTable이 있어야 한다.
 
 
