@@ -183,7 +183,7 @@ docker compose -p kitchenpos up -d
 - `Product`는 식별자와 `Name`, `Price`을 가진다.
 - `Price`는 0원 이상이어야 한다.
 - `Name`은 `Profanity`이 없는 1글자 이상의 단어가 필요하다.
-- `Price`가 변경되었을때, (`Menu`의 `Price` > `MenuProduct`들의 `Price`) 이면 `Menu`의 `MenuStatus`는 `Hide`가 된다.
+- `Price`가 변경되었을때, (`Menu`의 가격 > `MenuProduct`들의 가격의합) 이면 `MenuStatus`는 `Hide`가 된다.
 
 ### 메뉴그룹
 - `MenuGroup`은 식별자와 `Name`을 가진다.
@@ -192,43 +192,36 @@ docker compose -p kitchenpos up -d
 ### 메뉴
 - `Menu`는 식별자와 `Name`, `Price`, `MenuGroup`, `MenuProduct`, `MenuStatus`를 가진다.
 - `Price`는 0원 이상이어야 한다.
-- 등록된 MenuGroup이 필요하다.
-- MenuProduct는 1개 이상 필요하다.
-- MenuProduct에는 서로다른 Product가 있어야 한다.
-- MenuProduct의 수량은 0개 이상이어야 한다.
-- MenuProduct에는 등록된 Product가 있어야 한다.
-- Price는 MenuProduct들의 Price의 합보다 작아야 한다.
+- `MenuGroup`이 필요하다.
+- 수량이 0개 이상인 `MenuProduct` 1개 이상 필요하다.
+- `Price`는 `MenuProduct`들의 가격의 합보다 작아야 한다.
 - `Name`은 `Profanity`이 없는 1글자 이상의 단어가 필요하다.
-- MenuStatus에는 Display와 Hide가 있고 상태를 수정할 수 있다.
-- Display인 Menu만 Guest가 Order를 요청할 수 있다.
-- Display는 Menu의 Price가 MenuProduct들의 Price의 합보다 작아야 가능하다.
-- Hide인 Menu는 Guest가 Order를 요청할 수 없다.
+- `MenuStatus`에는 `Display`와 `Hide`가 있고 상태를 수정할 수 있다.
+- `Display`인 `Menu`만 `Guest`가 주문할 수 있다.
+- `Display`는 `Menu`의 `Price`가 `MenuProduct`들의 가격의 합보다 작아야 한다.
 
 ### 주문테이블
-- OrderTable은 식별자와 Name, NumberOfGuests, TableStatus를 가진다.
+- `OrderTable`은 식별자와 `Name`, `NumberOfGuests`, `TableStatus`를 가진다.
 - `Name`은 1글자 이상의 단어가 필요하다.
-- TableStatus는 Sit, Clear가 있고 상태를 수정할 수 있다.
-- TableStatus는 Table에 OrderStatus가 Complete가 아닌 Order가 남아 있다면, Clear할 수 없다.
-- OrderTable에 있는 NumberOfGuest 변경이 가능하다.
-- NumberOfGuests를 변경 시, 0명이상이 필요하다.
+- `TableStatus`는 `Sit`, `Clear`가 있고 상태를 수정할 수 있다.
+- `TableStatus`는 `OrderTable`에 `OrderStatus`가 `Complete`가 아닌 주문이 남아 있다면, `Clear`할 수 없다.
+- `OrderTable`에 있는 `NumberOfGuest`는 변경이 가능하다.
+- `NumberOfGuests`를 변경 시, 0명이상이 필요하다.
 
 ### 주문
-- Order는 식별자와 OrderType, OrderStatus, OrderDateTime, OrderLineItem, DeliveryAddress, OrderTable을 가진다.
-- OrderType은 Delivery, TakeOut, EatIn 중에 한가지를 가진다.
-- OrderLineItem이1개 이상 필요하다.
-- OrderLineItem에는 서로다른 Menu가 있어야 한다.
-- OrderLineItem에는 유효한 Menu가 있어야 한다. 
-- OrderType이 Takeout 또는 Delivery 일때, OrderLineItem의 Quantity는 1개 이상 필요하다
-- OrderType이 Delivery 일때, DeliveryAddress가 있어야 한다.
-- OrderType이 EatIn 일때, OrderTable이 있어야 한다.
+- `Order`는 식별자와 `OrderType`, `OrderStatus`, `OrderDateTime`, `OrderLineItem`, `DeliveryAddress`, `OrderTable`을 가진다.
+- `OrderType`은 `Delivery`, `TakeOut`, `EatIn` 중에 한가지를 가진다.
+- `OrderLineItem`이 1개 이상 필요하다.
+
 
 ### 배달
-- Delivery는 OrderType은 Delivery, OrderStatus는 Waiting에서 시작한다.
-- Order를 확인하고 DeliveryAgent에게 Delivery를 요청하고 OderStatus를 Accept로 변경한다.
-- DeliveryAgent에게 전달하면 OrderStatus를 Served로 변경한다.
-- Order를 확인한 DeliveryAgent가 Delivery를 시작하면 OrderStatus를 Delivering로 변경한다.
-- DeliveryAgent가 DeliveryAddress로 이동하여 Delivery를 완료하면 OrderStatus를 Delivered로 변경한다.
-- Guests에게 Delivery가 완료됬음을 확인하면 OrderStatus를 Complete로 변경한다.
+- `OrderType`은 `Delivery`, `OrderStatus`는 `Waiting`에서 시작한다.
+- `DeliveryAddress`가 필요하다.
+- `OrderStatus`를 `Accepted` 하기 위해 외부 호출인 `DeliveryAgent`에게 배달 요청이 필요하다.
+- `OrderStatus`는 `Waiting` -> `Accepted` -> `Served` -> `Delivering` -> `Delivered` -> `Complete`로 변경된다.
 
 ### 매장 식사
+- `OrderTable`이 필요하다.
+
 ### 포장
+- `OrderLineItem`의 수량은 0개 이상 필요하다
