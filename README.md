@@ -222,4 +222,13 @@ docker compose -p kitchenpos up -d
 - OrderType이 Delivery 일때, DeliveryAddress가 있어야 한다.
 - OrderType이 EatIn 일때, OrderTable이 있어야 한다.
 
+### 배달
+- Delivery는 OrderType은 Delivery, OrderStatus는 Waiting에서 시작한다.
+- Order를 확인하고 DeliveryAgent에게 Delivery를 요청하고 OderStatus를 Accept로 변경한다.
+- DeliveryAgent에게 전달하면 OrderStatus를 Served로 변경한다.
+- Order를 확인한 DeliveryAgent가 Delivery를 시작하면 OrderStatus를 Delivering로 변경한다.
+- DeliveryAgent가 DeliveryAddress로 이동하여 Delivery를 완료하면 OrderStatus를 Delivered로 변경한다.
+- Guests에게 Delivery가 완료됬음을 확인하면 OrderStatus를 Complete로 변경한다.
 
+### 매장 식사
+### 포장
