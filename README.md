@@ -182,8 +182,8 @@ docker compose -p kitchenpos up -d
 ### 상품
 - `Product`는 식별자와 `Name`, `Price`을 가진다.
 - `Price`는 0원 이상이어야 한다.
+  - `Price`가 변경되었을때, (`Menu`의 가격 > `MenuProduct`들의 가격의합) 이면 `MenuStatus`는 `Hide`가 된다.
 - `Name`은 `Profanity`이 없는 1글자 이상의 단어가 필요하다.
-- `Price`가 변경되었을때, (`Menu`의 가격 > `MenuProduct`들의 가격의합) 이면 `MenuStatus`는 `Hide`가 된다.
 
 ### 메뉴그룹
 - `MenuGroup`은 식별자와 `Name`을 가진다.
@@ -197,16 +197,16 @@ docker compose -p kitchenpos up -d
 - `Price`는 `MenuProduct`들의 가격의 합보다 작아야 한다.
 - `Name`은 `Profanity`이 없는 1글자 이상의 단어가 필요하다.
 - `MenuStatus`에는 `Display`와 `Hide`가 있고 상태를 수정할 수 있다.
-- `Display`인 `Menu`만 `Guest`가 주문할 수 있다.
-- `Display`는 `Menu`의 `Price`가 `MenuProduct`들의 가격의 합보다 작아야 한다.
+  - `Display`인 `Menu`만 `Guest`가 주문할 수 있다.
+  - `Display`는 `Menu`의 `Price`가 `MenuProduct`들의 가격의 합보다 작아야 한다.
 
 ### 주문테이블
 - `OrderTable`은 식별자와 `Name`, `NumberOfGuests`, `TableStatus`를 가진다.
 - `Name`은 1글자 이상의 단어가 필요하다.
 - `TableStatus`는 `Sit`, `Clear`가 있고 상태를 수정할 수 있다.
-- `TableStatus`는 `OrderTable`에 `OrderStatus`가 `Complete`가 아닌 주문이 남아 있다면, `Clear`할 수 없다.
+  - `OrderTable`에 `OrderStatus`가 `Complete`가 아닌 주문이 남아 있다면, `Clear`할 수 없다.
 - `OrderTable`에 있는 `NumberOfGuest`는 변경이 가능하다.
-- `NumberOfGuests`를 변경 시, 0명이상이 필요하다.
+  - `NumberOfGuests`를 변경 시, 0명이상이 필요하다.
 
 ### 주문
 - `Order`는 식별자와 `OrderType`, `OrderStatus`, `OrderDateTime`, `OrderLineItem`, `DeliveryAddress`, `OrderTable`을 가진다.
@@ -217,11 +217,16 @@ docker compose -p kitchenpos up -d
 ### 배달
 - `OrderType`은 `Delivery`, `OrderStatus`는 `Waiting`에서 시작한다.
 - `DeliveryAddress`가 필요하다.
-- `OrderStatus`를 `Accepted` 하기 위해 외부 호출인 `DeliveryAgent`에게 배달 요청이 필요하다.
 - `OrderStatus`는 `Waiting` -> `Accepted` -> `Served` -> `Delivering` -> `Delivered` -> `Complete`로 변경된다.
+  - `Accepted`로 변경 하기 위해서 외부 호출인 `DeliveryAgent`에게 배달 요청이 필요하다.
 
 ### 매장 식사
-- `OrderTable`이 필요하다.
+- `OrderType`은 `EatIn`, `OrderStatus`는 `Waiting`에서 시작한다.
+- `OrderTable`이 필요하다
+- `OrderStatus`는 `Waiting` -> `Accepted` -> `Served` -> `Complete`로 변경된다.
 
 ### 포장
-- `OrderLineItem`의 수량은 0개 이상 필요하다
+- `OrderType`은 `Takeout`, `OrderStatus`는 `Waiting`에서 시작한다.
+- `OrderStatus`는 `Waiting` -> `Accepted` -> `Served` -> `Complete`로 변경된다.
+  - `OrderStatus`가 `Complete`일때 `TableStatus`는 `Clear`, `NumberOfGuest`는 0명이 된다.
+
