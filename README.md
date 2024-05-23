@@ -191,13 +191,12 @@ docker compose -p kitchenpos up -d
 
 ### 메뉴
 - `Menu`는 식별자와 `Name`, `Price`, `MenuGroup`, `MenuProduct`, `MenuStatus`를 가진다.
-- `Price`는 0원 이상이어야 한다.
+- `Price`는 0원 이상이어야 하고 변경될 수 있다.
+  - `MenuProduct`들의 가격의 합보다 작아야 한다.
 - `MenuGroup`이 필요하다.
 - 수량이 0개 이상인 `MenuProduct` 1개 이상 필요하다.
-- `Price`는 `MenuProduct`들의 가격의 합보다 작아야 한다.
 - `Name`은 `Profanity`이 없는 1글자 이상의 단어가 필요하다.
 - `MenuStatus`에는 `Display`와 `Hide`가 있고 상태를 수정할 수 있다.
-  - `Display`인 `Menu`만 `Guest`가 주문할 수 있다.
   - `Display`는 `Menu`의 `Price`가 `MenuProduct`들의 가격의 합보다 작아야 한다.
 
 ### 주문테이블
@@ -206,6 +205,7 @@ docker compose -p kitchenpos up -d
 - `TableStatus`는 `Sit`, `Clear`가 있고 상태를 수정할 수 있다.
   - `OrderTable`에 `OrderStatus`가 `Complete`가 아닌 주문이 남아 있다면, `Clear`할 수 없다.
 - `OrderTable`에 있는 `NumberOfGuest`는 변경이 가능하다.
+  - `TableStatus`가 `Sit`일 경우에 변경이 가능하다.
   - `NumberOfGuests`를 변경 시, 0명이상이 필요하다.
 
 ### 주문
