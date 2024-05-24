@@ -182,7 +182,8 @@ docker compose -p kitchenpos up -d
 ### 상품
 - `Product`는 식별자와 `Name`, `Price`을 가진다.
 - `Price`는 0원 이상이어야 한다.
-  - `Price`가 변경되었을때, (`Menu`의 가격 > `MenuProduct`들의 가격의합) 이면 `MenuStatus`는 `Hide`가 된다.
+- `Price`는 변경될 수 있다.
+  - `Product`가 포함된 `Menu`가 있다면, `MenuProduct`에 있는 `Product`의 `Price`도 변경된다.
 - `Name`은 `Profanity`이 없는 1글자 이상의 단어가 필요하다.
 
 ### 메뉴그룹
