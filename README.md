@@ -108,7 +108,7 @@ docker compose -p kitchenpos up -d
 | 상품 이름 | Name  | 상품의 이름으로 비속어는 포할될 수 없다. |
 | 상품 가격 | Price | 상품의 가격으로 0원 이상이다.       |
 
-### 메뉴그룹
+### 메뉴 그룹
 | 한글명      | 영문명       | 설명                           |
 |----------|-----------|------------------------------|
 | 메뉴 그룹    | MenuGroup | 특정한 목적을 가지고 메뉴들을 묶는 것을 의미한다. |
@@ -119,12 +119,16 @@ docker compose -p kitchenpos up -d
 |--------|-------------|------------------------------------------------------------------|
 | 메뉴     | Menu        | 손님에게 판매할 수 있는 서비스 정보를 의미한다.                                      |
 | 메뉴 이름  | Name        | 메뉴의 이름으로 비속어는 포함될 수 없다.                                          |
+
+### 메뉴 상세
+| 한글명    | 영문명         | 설명                                                               |
+|--------|-------------|------------------------------------------------------------------|
 | 메뉴 가격  | Price       | 메뉴의 가격으로 0원 이상이다.                                                |
 | 메뉴 상태  | MenuStatus  | 테이블의 공개가능여부를 상태로 나타낸 것으로 공개, 비공개로 표현한다.                          |
 | 메뉴 공개  | Display     | 메뉴를 공개하여 손님이 주문할 수 있는 상태이다.                                      |
 | 메뉴 비공개 | Hide        | 메뉴를 비공개하여 손님이 주문할 수 없는 상태이다. 메뉴의 가격이 메뉴상품들의 가격의 합보다 높으면 비공개가 된다. |
 
-### 메뉴상품
+### 메뉴 상품
 | 한글명   | 영문명         | 설명                               |
 |-------|-------------|----------------------------------|
 | 메뉴 상품 | MenuProduct | 메뉴를 구성하기 위해 상품에 순서와 개수를 부여한 것이다. |
@@ -196,7 +200,6 @@ docker compose -p kitchenpos up -d
 - `Product`는 식별자와 `Name`, `Price`을 가진다.
 - `Price`는 0원 이상이어야 한다.
 - `Price`는 변경될 수 있다.
-  - `Product`가 포함된 `Menu`가 있다면, `MenuProduct`에 있는 `Product`의 `Price`도 변경된다.
 - `Name`은 `Profanity`이 없는 1글자 이상의 단어가 필요하다.
 
 ### 메뉴그룹
@@ -204,14 +207,19 @@ docker compose -p kitchenpos up -d
 - `Name`은 1글자 이상이어야 한다.
 
 ### 메뉴
-- `Menu`는 식별자와 `Name`, `Price`, `MenuGroup`, `MenuProduct`, `MenuStatus`를 가진다.
+- `Menu`는 식별자와 `Name`, `MenuGroup`, `MenuDetail`을 가진다.
+- `MenuGroup`이 필요하다.
+- `MenuDatail`이 필요하다.
+- `Name`은 `Profanity`이 없는 1글자 이상의 단어가 필요하다.
+
+### 메뉴 상세
+- `MenuDetail`은 `Price`, `MenuProduct`, `MenuStatus`를 가진다.
 - `Price`는 0원 이상이어야 하고 변경될 수 있다.
   - `MenuProduct`들의 가격의 합보다 작아야 한다.
-- `MenuGroup`이 필요하다.
 - `MenuProduct`는 1개 이상 필요하다.
-- `Name`은 `Profanity`이 없는 1글자 이상의 단어가 필요하다.
 - `MenuStatus`에는 `Display`와 `Hide`가 있고 상태를 수정할 수 있다.
   - `Display`는 `Menu`의 `Price`가 `MenuProduct`들의 가격의 합보다 작아야 한다.
+
 
 ### 메뉴 상품
 - `MenuProduct`는 `Seq`, `Product`, `Quantity`를 가진다.
