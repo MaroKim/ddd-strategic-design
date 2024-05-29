@@ -3,11 +3,8 @@ package kitchenpos;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuGroup;
 import kitchenpos.menu.domain.MenuProduct;
-import kitchenpos.order.domain.Order;
-import kitchenpos.order.domain.OrderLineItem;
-import kitchenpos.order.domain.OrderStatus;
-import kitchenpos.order.domain.OrderTable;
-import kitchenpos.order.domain.OrderType;
+
+import kitchenpos.eatinorder.domain.OrderTable;
 import kitchenpos.product.domain.Product;
 
 import java.math.BigDecimal;
@@ -64,7 +61,7 @@ public class Fixtures {
         menuProduct.setQuantity(quantity);
         return menuProduct;
     }
-
+/*
     public static Order order(final OrderStatus status, final String deliveryAddress) {
         final Order order = new Order();
         order.setId(UUID.randomUUID());
@@ -103,7 +100,7 @@ public class Fixtures {
         orderLineItem.setMenu(menu());
         return orderLineItem;
     }
-
+*/
     public static OrderTable orderTable() {
         return orderTable(false, 0);
     }
