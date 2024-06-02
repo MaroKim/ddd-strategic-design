@@ -1,11 +1,17 @@
 package kitchenpos;
 
+import kitchenpos.deliveryorder.domain.DeliveryOrder;
+import kitchenpos.eatinorder.domain.EatInOrder;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuGroup;
 import kitchenpos.menu.domain.MenuProduct;
 
 import kitchenpos.eatinorder.domain.OrderTable;
+import kitchenpos.orders.domain.OrderLineItem;
+import kitchenpos.orders.domain.OrderStatus;
+import kitchenpos.orders.domain.OrderType;
 import kitchenpos.product.domain.Product;
+import kitchenpos.takeoutorder.domain.TakeOutOrder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -61,37 +67,57 @@ public class Fixtures {
         menuProduct.setQuantity(quantity);
         return menuProduct;
     }
-/*
-    public static Order order(final OrderStatus status, final String deliveryAddress) {
-        final Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.DELIVERY);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
-        order.setDeliveryAddress(deliveryAddress);
-        return order;
+
+    public static DeliveryOrder deliveryOrder(final OrderStatus status, final String deliveryAddress) {
+        final DeliveryOrder deliveryOrder = new DeliveryOrder();
+        deliveryOrder.setId(UUID.randomUUID());
+        deliveryOrder.setType(OrderType.DELIVERY);
+        deliveryOrder.setStatus(status);
+        deliveryOrder.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
+        deliveryOrder.setOrderLineItems(Arrays.asList(orderLineItem()));
+        deliveryOrder.setDeliveryAddress(deliveryAddress);
+        return deliveryOrder;
     }
 
-    public static Order order(final OrderStatus status) {
-        final Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.TAKEOUT);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
-        return order;
+    public static DeliveryOrder deliveryOrder(final OrderStatus status) {
+        final DeliveryOrder deliveryOrder = new DeliveryOrder();
+        deliveryOrder.setId(UUID.randomUUID());
+        deliveryOrder.setType(OrderType.DELIVERY);
+        deliveryOrder.setStatus(status);
+        deliveryOrder.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
+        deliveryOrder.setOrderLineItems(Arrays.asList(orderLineItem()));
+        return deliveryOrder;
     }
 
-    public static Order order(final OrderStatus status, final OrderTable orderTable) {
-        final Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.EAT_IN);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
-        order.setOrderTable(orderTable);
-        return order;
+    public static TakeOutOrder takeOutOrder(final OrderStatus status) {
+        final TakeOutOrder takeOutOrder = new TakeOutOrder();
+        takeOutOrder.setId(UUID.randomUUID());
+        takeOutOrder.setType(OrderType.TAKEOUT);
+        takeOutOrder.setStatus(status);
+        takeOutOrder.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
+        takeOutOrder.setOrderLineItems(Arrays.asList(orderLineItem()));
+        return takeOutOrder;
+    }
+
+    public static EatInOrder eatInOrder(final OrderStatus status) {
+        final EatInOrder eatInOrder = new EatInOrder();
+        eatInOrder.setId(UUID.randomUUID());
+        eatInOrder.setType(OrderType.EAT_IN);
+        eatInOrder.setStatus(status);
+        eatInOrder.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
+        eatInOrder.setOrderLineItems(Arrays.asList(orderLineItem()));
+        return eatInOrder;
+    }
+
+    public static EatInOrder eatInOrder(final OrderStatus status, final OrderTable orderTable) {
+        final EatInOrder eatInOrder = new EatInOrder();
+        eatInOrder.setId(UUID.randomUUID());
+        eatInOrder.setType(OrderType.EAT_IN);
+        eatInOrder.setStatus(status);
+        eatInOrder.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
+        eatInOrder.setOrderLineItems(Arrays.asList(orderLineItem()));
+        eatInOrder.setOrderTable(orderTable);
+        return eatInOrder;
     }
 
     public static OrderLineItem orderLineItem() {
@@ -100,7 +126,7 @@ public class Fixtures {
         orderLineItem.setMenu(menu());
         return orderLineItem;
     }
-*/
+
     public static OrderTable orderTable() {
         return orderTable(false, 0);
     }

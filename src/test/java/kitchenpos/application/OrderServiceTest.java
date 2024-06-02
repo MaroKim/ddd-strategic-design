@@ -1,7 +1,13 @@
 package kitchenpos.application;
 
+import kitchenpos.orders.domain.OrderLineItem;
+
+import java.math.BigDecimal;
+import java.util.Random;
+import java.util.UUID;
+
 class OrderServiceTest {
-    /*
+/*
     private OrderRepository orderRepository;
     private MenuRepository menuRepository;
     private OrderTableRepository orderTableRepository;
@@ -349,7 +355,7 @@ class OrderServiceTest {
         return order;
     }
 
-    private static OrderLineItem createOrderLineItemRequest(final UUID menuId, final long price, final long quantity) {
+    public static OrderLineItem createOrderLineItemRequest(final UUID menuId, final long price, final long quantity) {
         final OrderLineItem orderLineItem = new OrderLineItem();
         orderLineItem.setSeq(new Random().nextLong());
         orderLineItem.setMenuId(menuId);
@@ -358,5 +364,5 @@ class OrderServiceTest {
         return orderLineItem;
     }
 
-     */
+*/
 }

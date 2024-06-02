@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-public class InMemoryOrderRepository  {
+public class InMemoryOrderRepository {
     /*
     private final Map<UUID, Order> orders = new HashMap<>();
 
@@ -35,5 +35,6 @@ public class InMemoryOrderRepository  {
         return orders.values()
             .stream()
             .anyMatch(order -> order.getOrderTable().equals(orderTable) && order.getStatus() != status);
-    }*/
+    }
+    */
 }
