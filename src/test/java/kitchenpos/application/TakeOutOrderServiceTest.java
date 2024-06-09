@@ -1,11 +1,9 @@
 package kitchenpos.application;
 
-import kitchenpos.deliveryorder.application.DeliveryOrderService;
 import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.orders.domain.OrderLineItem;
-import kitchenpos.orders.domain.OrderStatus;
-import kitchenpos.orders.domain.OrderType;
 import kitchenpos.takeoutorder.application.TakeOutOrderService;
+import kitchenpos.takeoutorder.domain.OrderLineItem;
+import kitchenpos.takeoutorder.domain.OrderStatus;
 import kitchenpos.takeoutorder.domain.TakeOutOrder;
 import kitchenpos.takeoutorder.domain.TakeOutOrderRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +42,6 @@ public class TakeOutOrderServiceTest {
     void createTakeoutOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
         final TakeOutOrder expected = createOrderRequest(
-                OrderType.TAKEOUT,
                 OrderStatus.WAITING,
                 LocalDateTime.now(),
                 List.of(createOrderLineItemRequest(menuId, 19_000L, 3L)));
@@ -52,9 +49,7 @@ public class TakeOutOrderServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getType()).isEqualTo(expected.getType()),
                 () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.WAITING),
-                () -> assertThat(actual.getOrderDateTime()).isNotNull(),
                 () -> assertThat(actual.getOrderLineItems()).hasSize(1)
         );
     }
@@ -74,7 +69,6 @@ public class TakeOutOrderServiceTest {
     @ParameterizedTest
     void create(final List<OrderLineItem> orderLineItems) {
         final TakeOutOrder expected = createOrderRequest(
-                OrderType.TAKEOUT,
                 OrderStatus.WAITING,
                 LocalDateTime.now(),
                 orderLineItems);
@@ -95,7 +89,6 @@ public class TakeOutOrderServiceTest {
     void createNotDisplayedMenuOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct())).getId();
         final TakeOutOrder expected = createOrderRequest(
-                OrderType.TAKEOUT,
                 OrderStatus.WAITING,
                 LocalDateTime.now(),
                 List.of(createOrderLineItemRequest(menuId, 19_000L, 3L)));
@@ -108,7 +101,6 @@ public class TakeOutOrderServiceTest {
     void createNotMatchedMenuPriceOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
         final TakeOutOrder expected = createOrderRequest(
-                OrderType.TAKEOUT,
                 OrderStatus.WAITING,
                 LocalDateTime.now(),
                 List.of(createOrderLineItemRequest(menuId, 16_000L, 3L)));

@@ -3,10 +3,9 @@ package kitchenpos.application;
 import kitchenpos.deliveryorder.application.DeliveryOrderService;
 import kitchenpos.deliveryorder.domain.DeliveryOrder;
 import kitchenpos.deliveryorder.domain.DeliveryOrderRepository;
+import kitchenpos.deliveryorder.domain.OrderLineItem;
+import kitchenpos.deliveryorder.domain.OrderStatus;
 import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.orders.domain.OrderLineItem;
-import kitchenpos.orders.domain.OrderStatus;
-import kitchenpos.orders.domain.OrderType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,7 +49,6 @@ public class DeliveryOrderServiceTest {
     void createDeliveryOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
         final DeliveryOrder expected = createOrderRequest(
-                OrderType.DELIVERY,
                 OrderStatus.WAITING,
                 LocalDateTime.now(),
                 List.of(createOrderLineItemRequest(menuId, 19_000L, 3L)),
@@ -60,9 +58,7 @@ public class DeliveryOrderServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getType()).isEqualTo(expected.getType()),
                 () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.WAITING),
-                () -> assertThat(actual.getOrderDateTime()).isNotNull(),
                 () -> assertThat(actual.getOrderLineItems()).hasSize(1),
                 () -> assertThat(actual.getDeliveryAddress()).isEqualTo(expected.getDeliveryAddress())
         );
@@ -71,10 +67,9 @@ public class DeliveryOrderServiceTest {
     @DisplayName("주문 유형이 올바르지 않으면 등록할 수 없다.")
     @NullSource
     @ParameterizedTest
-    void create(final OrderType type) {
+    void create() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
         final DeliveryOrder expected = createOrderRequest(
-                type,
                 OrderStatus.WAITING,
                 LocalDateTime.now(),
                 List.of(createOrderLineItemRequest(menuId, 19_000L, 3L)),
@@ -91,7 +86,6 @@ public class DeliveryOrderServiceTest {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
         
         final DeliveryOrder expected = createOrderRequest(
-                OrderType.DELIVERY,
                 OrderStatus.WAITING,
                 LocalDateTime.now(),
                 List.of(createOrderLineItemRequest(menuId, 19_000L, 3L)),

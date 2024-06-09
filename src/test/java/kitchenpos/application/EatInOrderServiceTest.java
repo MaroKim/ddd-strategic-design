@@ -1,14 +1,8 @@
 package kitchenpos.application;
 
 import kitchenpos.eatinorder.application.EatInOrderService;
-import kitchenpos.eatinorder.domain.EatInOrder;
-import kitchenpos.eatinorder.domain.EatInOrderRepository;
-import kitchenpos.eatinorder.domain.OrderTable;
-import kitchenpos.eatinorder.domain.OrderTableRepository;
+import kitchenpos.eatinorder.domain.*;
 import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.orders.domain.OrderLineItem;
-import kitchenpos.orders.domain.OrderStatus;
-import kitchenpos.orders.domain.OrderType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,7 +44,6 @@ public class EatInOrderServiceTest {
         final OrderTable orderTable = orderTable(true, 4);
         orderTableRepository.save(orderTable).getId();
         final EatInOrder expected = createOrderRequest(
-                OrderType.EAT_IN,
                 OrderStatus.WAITING,
                 LocalDateTime.now(),
                 List.of(createOrderLineItemRequest(menuId, 19_000L, 3L)),
@@ -60,9 +53,7 @@ public class EatInOrderServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getType()).isEqualTo(expected.getType()),
                 () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.WAITING),
-                () -> assertThat(actual.getOrderDateTime()).isNotNull(),
                 () -> assertThat(actual.getOrderLineItems()).hasSize(1),
                 () -> assertThat(actual.getOrderTable().getId()).isEqualTo(expected.getOrderTableId())
         );
@@ -76,7 +67,6 @@ public class EatInOrderServiceTest {
         final OrderTable orderTable = orderTable(true, 4);
         orderTableRepository.save(orderTable).getId();
         final EatInOrder expected = createOrderRequest(
-                OrderType.EAT_IN,
                 OrderStatus.WAITING,
                 LocalDateTime.now(),
                 List.of(createOrderLineItemRequest(menuId, 19_000L, quantity)),
@@ -93,8 +83,7 @@ public class EatInOrderServiceTest {
         final OrderTable orderTable = orderTable(false, 0);
         orderTableRepository.save(orderTable).getId();
         final EatInOrder expected = createOrderRequest(
-                OrderType.EAT_IN,
-                OrderStatus.WAITING,
+                kitchenpos.eatinorder.domain.OrderStatus.WAITING,
                 LocalDateTime.now(),
                 List.of(createOrderLineItemRequest(menuId, 19_000L, 3L)),
                 orderTable
@@ -102,16 +91,6 @@ public class EatInOrderServiceTest {
         assertThatThrownBy(() -> eatInOrderService.create(expected))
                 .isInstanceOf(IllegalStateException.class);
     }
-
-    @DisplayName("포장 및 매장 주문의 경우 서빙된 주문만 완료할 수 있다.")
-    @EnumSource(value = OrderStatus.class, names = "SERVED", mode = EnumSource.Mode.EXCLUDE)
-    @ParameterizedTest
-    void completeTakeoutAndEatInOrder(final OrderStatus status) {
-        final UUID orderId = eatInOrderRepository.save(eatInOrder(status)).getId();
-        assertThatThrownBy(() -> eatInOrderService.complete(orderId))
-                .isInstanceOf(IllegalStateException.class);
-    }
-
     @DisplayName("주문 테이블의 모든 매장 주문이 완료되면 빈 테이블로 설정한다.")
     @Test
     void completeEatInOrder() {
