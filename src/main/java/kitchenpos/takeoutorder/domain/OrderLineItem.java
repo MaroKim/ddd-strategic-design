@@ -1,4 +1,4 @@
-package kitchenpos.orders.domain;
+package kitchenpos.takeoutorder.domain;
 
 import jakarta.persistence.*;
 import kitchenpos.menu.domain.Menu;

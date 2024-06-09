@@ -1,18 +1,11 @@
 package kitchenpos.eatinorder.application;
 
-import kitchenpos.eatinorder.domain.EatInOrder;
-import kitchenpos.eatinorder.domain.EatInOrderRepository;
-import kitchenpos.eatinorder.domain.OrderTable;
-import kitchenpos.eatinorder.domain.OrderTableRepository;
+import kitchenpos.eatinorder.domain.*;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.orders.domain.OrderLineItem;
-import kitchenpos.orders.domain.OrderStatus;
-import kitchenpos.orders.domain.OrderType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -33,10 +26,7 @@ public class EatInOrderService {
 
     @Transactional
     public EatInOrder create(final EatInOrder request) {
-        final OrderType type = request.getType();
-        if (Objects.isNull(type)) {
-            throw new IllegalArgumentException();
-        }
+
         final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
@@ -52,11 +42,7 @@ public class EatInOrderService {
         final List<OrderLineItem> orderLineItems = new ArrayList<>();
         for (final OrderLineItem orderLineItemRequest : orderLineItemRequests) {
             final long quantity = orderLineItemRequest.getQuantity();
-            if (type != OrderType.EAT_IN) {
-                if (quantity < 0) {
-                    throw new IllegalArgumentException();
-                }
-            }
+
             final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
                     .orElseThrow(NoSuchElementException::new);
             if (!menu.isDisplayed()) {
@@ -72,9 +58,7 @@ public class EatInOrderService {
         }
         EatInOrder order = new EatInOrder();
         order.setId(UUID.randomUUID());
-        order.setType(type);
         order.setStatus(OrderStatus.WAITING);
-        order.setOrderDateTime(LocalDateTime.now());
         order.setOrderLineItems(orderLineItems);
 
 
@@ -114,7 +98,6 @@ public class EatInOrderService {
     public EatInOrder complete(final UUID orderId) {
         final EatInOrder order = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        final OrderType type = order.getType();
         final OrderStatus status = order.getStatus();
 
         if (status != OrderStatus.SERVED) {

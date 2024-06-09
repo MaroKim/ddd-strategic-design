@@ -2,17 +2,15 @@ package kitchenpos.deliveryorder.application;
 
 import kitchenpos.deliveryorder.domain.DeliveryOrder;
 import kitchenpos.deliveryorder.domain.DeliveryOrderRepository;
+import kitchenpos.deliveryorder.domain.OrderLineItem;
+import kitchenpos.deliveryorder.domain.OrderStatus;
 import kitchenpos.infra.KitchenridersClient;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.orders.domain.OrderLineItem;
-import kitchenpos.orders.domain.OrderStatus;
-import kitchenpos.orders.domain.OrderType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -34,10 +32,7 @@ public class DeliveryOrderService {
 
     @Transactional
     public DeliveryOrder create(final DeliveryOrder request) {
-        final OrderType type = request.getType();
-        if (Objects.isNull(type)) {
-            throw new IllegalArgumentException();
-        }
+
         final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
@@ -73,9 +68,7 @@ public class DeliveryOrderService {
         }
         DeliveryOrder order = new DeliveryOrder();
         order.setId(UUID.randomUUID());
-        order.setType(type);
         order.setStatus(OrderStatus.WAITING);
-        order.setOrderDateTime(LocalDateTime.now());
         order.setOrderLineItems(orderLineItems);
         final String deliveryAddress = request.getDeliveryAddress();
         if (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty()) {
@@ -144,7 +137,6 @@ public class DeliveryOrderService {
     public DeliveryOrder complete(final UUID orderId) {
         final DeliveryOrder order = deliveryOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        final OrderType type = order.getType();
         final OrderStatus status = order.getStatus();
 
         if (status != OrderStatus.DELIVERED) {

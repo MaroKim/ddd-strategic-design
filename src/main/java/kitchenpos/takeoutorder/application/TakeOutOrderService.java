@@ -3,15 +3,13 @@ package kitchenpos.takeoutorder.application;
 
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.orders.domain.OrderLineItem;
-import kitchenpos.orders.domain.OrderStatus;
-import kitchenpos.orders.domain.OrderType;
+import kitchenpos.takeoutorder.domain.OrderLineItem;
+import kitchenpos.takeoutorder.domain.OrderStatus;
 import kitchenpos.takeoutorder.domain.TakeOutOrder;
 import kitchenpos.takeoutorder.domain.TakeOutOrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -30,10 +28,7 @@ public class TakeOutOrderService {
 
     @Transactional
     public TakeOutOrder create(final TakeOutOrder request) {
-        final OrderType type = request.getType();
-        if (Objects.isNull(type)) {
-            throw new IllegalArgumentException();
-        }
+
         final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
@@ -49,11 +44,11 @@ public class TakeOutOrderService {
         final List<OrderLineItem> orderLineItems = new ArrayList<>();
         for (final OrderLineItem orderLineItemRequest : orderLineItemRequests) {
             final long quantity = orderLineItemRequest.getQuantity();
-            if (type != OrderType.EAT_IN) {
-                if (quantity < 0) {
-                    throw new IllegalArgumentException();
-                }
+
+            if (quantity < 0) {
+                throw new IllegalArgumentException();
             }
+
             final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
                     .orElseThrow(NoSuchElementException::new);
             if (!menu.isDisplayed()) {
@@ -69,9 +64,7 @@ public class TakeOutOrderService {
         }
         TakeOutOrder order = new TakeOutOrder();
         order.setId(UUID.randomUUID());
-        order.setType(type);
         order.setStatus(OrderStatus.WAITING);
-        order.setOrderDateTime(LocalDateTime.now());
         order.setOrderLineItems(orderLineItems);
 
         return takeOutOrderRepository.save(order);
@@ -103,7 +96,6 @@ public class TakeOutOrderService {
     public TakeOutOrder complete(final UUID orderId) {
         final TakeOutOrder order = takeOutOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        final OrderType type = order.getType();
         final OrderStatus status = order.getStatus();
 
         if (status != OrderStatus.SERVED) {
